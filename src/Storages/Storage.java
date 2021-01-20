@@ -3,8 +3,8 @@ package Storages;
 import Things.Thing;
 
 public interface Storage {
-    void give(Thing thing, Storage storage);
-    void take(Thing thing, Storage storage);
+    void give(Thing thing);
+    void take(Thing thing);
     boolean have(Thing thing);
     String translation();
 }

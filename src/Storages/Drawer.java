@@ -19,12 +19,12 @@ public class Drawer implements Storage {
     }
 
     @Override
-    public void give(Thing thing, Storage storage) {
+    public void give(Thing thing) {
         things.remove(thing);
     }
 
     @Override
-    public void take(Thing thing, Storage storage) {
+    public void take(Thing thing) {
         things.add(thing);
     }
 

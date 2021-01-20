@@ -8,7 +8,7 @@ public class Ruler implements Thing, Storage {
     private Thing right = null;
 
     @Override
-    public void give(Thing thing, Storage storage) {
+    public void give(Thing thing) {
         if (left == thing) {
             left = null;
         } else {
@@ -17,7 +17,7 @@ public class Ruler implements Thing, Storage {
     }
 
     @Override
-    public void take(Thing thing, Storage storage) {
+    public void take(Thing thing) {
         right = left;
         left = thing;
     }

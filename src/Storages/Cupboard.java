@@ -8,22 +8,23 @@ import java.util.Objects;
 
 public class Cupboard implements Storage {
     private final ArrayList<Thing> things = new ArrayList<>();
-    private static boolean doors = false;
+    private boolean doors = false;
 
-    public Cupboard(Thing... things) {
+    public Cupboard( boolean doors, Thing... things) {
         this.things.addAll(Arrays.asList(things));
+        this.doors = doors;
     }
 
-    public static void changeDoors() {
+    public void changeDoors() {
         doors = !doors;
         System.out.println(doors ? "Дверцы шкафчика открылись" : "Дверцы шкафчика закрылись");
     }
 
-    public static void checkDoors() {
+    public void checkDoors() {
         System.out.println(doors ? "Дверцы шкафчика открыты" : "Дверцы шкафчика закрыты");
     }
 
-    public static boolean getDoors() {
+    public boolean getDoors() {
         return doors;
     }
 
@@ -33,12 +34,12 @@ public class Cupboard implements Storage {
     }
 
     @Override
-    public void give(Thing thing, Storage storage) {
+    public void give(Thing thing) {
         things.remove(thing);
     }
 
     @Override
-    public void take(Thing thing, Storage storage) {
+    public void take(Thing thing) {
         things.add(thing);
     }
 

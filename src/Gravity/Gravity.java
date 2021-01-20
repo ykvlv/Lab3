@@ -4,16 +4,19 @@ import Storages.*;
 import Things.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Gravity {
-    private static boolean gravity = true;
-    private static Storage[] storages;
+    private final Storage[] storages;
+    private boolean gravity;
 
-    public Gravity(Storage... storages) {
-        Gravity.storages = storages;
+    public Gravity(boolean gravity, Storage... storages) {
+        this.gravity = gravity;
+        this.storages = storages;
+
     }
 
-    public static void checkGravity() {
+    public void checkGravity() {
         for (Storage storage : storages) {
             if (storage.have(Mineral.MOONROCK) && storage.have(Mineral.MAGNETICIRONORE)) {
                 if (gravity) {
@@ -32,10 +35,25 @@ public class Gravity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Gravity gravity1 = (Gravity) o;
+        return gravity == gravity1.gravity && Arrays.equals(storages, gravity1.storages);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(gravity);
+        result = 31 * result + Arrays.hashCode(storages);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Gravity{" +
-                "gravity=" + gravity +
-                ", storages=" + Arrays.toString(storages) +
+                "storages=" + Arrays.toString(storages) +
+                ", gravity=" + gravity +
                 '}';
     }
 }
