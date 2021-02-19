@@ -1,6 +1,6 @@
 package Gravity;
 
-import Storages.*;
+import Storages.Storage;
 import Things.*;
 
 import java.util.Arrays;

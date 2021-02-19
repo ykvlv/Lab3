@@ -1,6 +1,7 @@
-package Storages;
-
 import Gravity.Gravity;
+import Humans.Human;
+import Storages.Storage;
+import Things.Thing;
 import Things.*;
 
 public class StorageManager {
@@ -10,7 +11,7 @@ public class StorageManager {
         this.subscriber = gravity;
     }
 
-    public void give(Storage sender, Thing thing, Storage receiver) {
+    public void give(Human sender, Thing thing, Storage receiver) {
         if (sender.have(thing)) {
             sender.give(thing);
             receiver.take(thing);
@@ -21,7 +22,7 @@ public class StorageManager {
         }
     }
 
-    public void take(Storage receiver, Thing thing, Storage sender) {
+    public void take(Human receiver, Thing thing, Storage sender) {
         if (sender.have(thing)) {
             sender.give(thing);
             receiver.take(thing);

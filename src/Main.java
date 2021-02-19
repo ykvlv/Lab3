@@ -1,20 +1,19 @@
 import Gravity.Gravity;
-import Humans.Znaika;
+import Humans.*;
 import Storages.*;
 import Things.*;
+import ThingsAndStorages.*;
 
 public class Main {
     public static void main(String[] args) {
-        Znaika znaika = new Znaika(10, Mineral.MOONROCK);
-        Cupboard bottomCupboard = new Cupboard(false, Mineral.ROCKCRYSTAL, Mineral.FELDSPAR, Mineral.MICA, Mineral.IRONSTONE, Mineral.COPPERPYRITE, Mineral.SULFUR, Mineral.PYRITE, Mineral.CHALCOPYRITE, Mineral.ZINKBLENDE, Mineral.GALENA, Mineral.MAGNETICIRONORE);
-        Cupboard topCupboard = new Cupboard(true, Mineral.DIAMOND, Mineral.APATITE, Mineral.HALITE);
-        Ruler ruler = new Ruler();
-        Drawer drawer = new Drawer(ruler);
+        Human znaika = new Znaika(10, Mineral.MOONROCK);
+        Storage bottomCupboard = new Cupboard(Mineral.ROCKCRYSTAL, Mineral.FELDSPAR, Mineral.MICA, Mineral.IRONSTONE, Mineral.COPPERPYRITE, Mineral.SULFUR, Mineral.PYRITE, Mineral.CHALCOPYRITE, Mineral.ZINKBLENDE, Mineral.GALENA, Mineral.MAGNETICIRONORE);
+        Storage topCupboard = new Cupboard(Mineral.DIAMOND, Mineral.APATITE, Mineral.HALITE);
+        ThingAndStorage ruler = new Ruler();
+        Storage drawer = new Drawer(ruler);
         Gravity znaikaRoomGravity = new Gravity(true, znaika, bottomCupboard, topCupboard, ruler, drawer);
         StorageManager s = new StorageManager(znaikaRoomGravity);
 
-        bottomCupboard.checkDoors();
-        bottomCupboard.changeDoors();
         s.give(znaika, Mineral.MOONROCK, bottomCupboard);
         s.take(znaika, Mineral.ROCKCRYSTAL, bottomCupboard);
         s.take(znaika, Mineral.FELDSPAR, bottomCupboard);
