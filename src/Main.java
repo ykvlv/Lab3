@@ -6,6 +6,7 @@ import ThingsAndStorages.*;
 
 public class Main {
     public static void main(String[] args) {
+        //а если еще комит
         Human znaika = new Znaika(10, Mineral.MOONROCK);
         Storage bottomCupboard = new Cupboard(Mineral.ROCKCRYSTAL, Mineral.FELDSPAR, Mineral.MICA, Mineral.IRONSTONE, Mineral.COPPERPYRITE, Mineral.SULFUR, Mineral.PYRITE, Mineral.CHALCOPYRITE, Mineral.ZINKBLENDE, Mineral.GALENA, Mineral.MAGNETICIRONORE);
         Storage topCupboard = new Cupboard(Mineral.DIAMOND, Mineral.APATITE, Mineral.HALITE);
