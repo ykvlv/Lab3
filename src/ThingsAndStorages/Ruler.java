@@ -1,10 +1,11 @@
 package ThingsAndStorages;
 
+import Storages.Storage;
 import Things.Thing;
 
 import java.util.Objects;
 
-public class Ruler implements ThingAndStorage {
+public class Ruler implements Thing, Storage {
     private Thing left = null;
     private Thing right = null;
 

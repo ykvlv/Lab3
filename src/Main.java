@@ -6,15 +6,16 @@ import ThingsAndStorages.*;
 
 public class Main {
     public static void main(String[] args) {
-        //а если еще комит
         Human znaika = new Znaika(10, Mineral.MOONROCK);
+        Human neznaika = new Neznaika(7);
         Storage bottomCupboard = new Cupboard(Mineral.ROCKCRYSTAL, Mineral.FELDSPAR, Mineral.MICA, Mineral.IRONSTONE, Mineral.COPPERPYRITE, Mineral.SULFUR, Mineral.PYRITE, Mineral.CHALCOPYRITE, Mineral.ZINKBLENDE, Mineral.GALENA, Mineral.MAGNETICIRONORE);
         Storage topCupboard = new Cupboard(Mineral.DIAMOND, Mineral.APATITE, Mineral.HALITE);
-        ThingAndStorage ruler = new Ruler();
+        Ruler ruler = new Ruler();
         Storage drawer = new Drawer(ruler);
-        Gravity znaikaRoomGravity = new Gravity(true, znaika, bottomCupboard, topCupboard, ruler, drawer);
+        Gravity znaikaRoomGravity = new Gravity(true, new Human[]{znaika, neznaika}, new Storage[]{bottomCupboard, topCupboard, ruler, drawer});
         StorageManager s = new StorageManager(znaikaRoomGravity);
 
+        znaika.say("Надо доставать из шкафчика все хранящиеся минералы. Как только будет удалено существо, с которым взаимодействует лунит, невесомость исчезнет, и мы узнаем, что это за вещество");
         s.give(znaika, Mineral.MOONROCK, bottomCupboard);
         s.take(znaika, Mineral.ROCKCRYSTAL, bottomCupboard);
         s.take(znaika, Mineral.FELDSPAR, bottomCupboard);
@@ -40,6 +41,7 @@ public class Main {
         s.give(znaika, Mineral.MAGNETICIRONORE, ruler);
         s.take(znaika, Mineral.MOONROCK, bottomCupboard);
         s.give(znaika, Mineral.MOONROCK, ruler);
-
+        znaika.say("Нормально так жмыхнуло.");
+        neznaika.say("Еще бы");
     }
 }
