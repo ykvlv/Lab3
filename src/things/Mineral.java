@@ -1,4 +1,9 @@
-package Things;
+package things;
+
+import interfaces.Thing;
+
+import java.util.Random;
+
 
 public enum Mineral implements Thing {
     MOONROCK("Лунный камень"),
@@ -26,5 +31,24 @@ public enum Mineral implements Thing {
     @Override
     public String translation() {
         return this.translation;
+    }
+
+    public static class ArrayOfMinerals {
+        public final Thing[] elements;
+
+        public ArrayOfMinerals(int count) {
+            Mineral[] m = Mineral.values();
+            Random rnd = new Random();
+            Mineral[] e = new Mineral[count];
+            for (int i = 0; i < count; i++) {
+                e[i] = m[rnd.nextInt(m.length)];
+            }
+            this.elements = e;
+        }
+
+        public Thing[] getElements() {
+            return this.elements;
+
+        }
     }
 }

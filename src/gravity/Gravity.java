@@ -1,8 +1,8 @@
-package Gravity;
+package gravity;
 
-import Humans.Human;
-import Storages.Storage;
-import Things.*;
+import humans.Human;
+import interfaces.Storage;
+import things.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +20,19 @@ public class Gravity {
     }
 
     private void humansCanFly(boolean bool) {
-        ArrayList<String> humansStr = new ArrayList<>();
-        humans.forEach((Human h) -> humansStr.add(h.translation()));
-        System.out.print(String.join(", ", humansStr));
+
+        class HumanStr {
+            private final ArrayList<String> string;
+
+            public HumanStr() {
+                this.string = new ArrayList<>();
+                humans.forEach((Human h) -> string.add(h.translation()));
+            }
+
+        }
+
+        HumanStr humans =new HumanStr();
+        System.out.print(String.join(", ", humans.string));
         System.out.println(bool ? " FLEW UP" : " FELL DOWN");
     }
 

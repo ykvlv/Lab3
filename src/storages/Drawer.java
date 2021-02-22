@@ -1,12 +1,14 @@
-package Storages;
+package storages;
 
-import Things.Thing;
+import interfaces.Storage;
+import interfaces.Thing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Drawer implements Storage {
+    private boolean open = true;
     private final ArrayList<Thing> things = new ArrayList<>();
 
     public Drawer(Thing... things) {
@@ -16,6 +18,16 @@ public class Drawer implements Storage {
     @Override
     public String translation() {
         return "Ящик стола";
+    }
+
+    @Override
+    public boolean opened() {
+        return open;
+    }
+
+    @Override
+    public void openClose() {
+        open = !open;
     }
 
     @Override

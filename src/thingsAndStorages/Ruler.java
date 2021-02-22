@@ -1,7 +1,8 @@
-package ThingsAndStorages;
+package thingsAndStorages;
 
-import Storages.Storage;
-import Things.Thing;
+import exceptions.CannotBeChangedException;
+import interfaces.Storage;
+import interfaces.Thing;
 
 import java.util.Objects;
 
@@ -32,6 +33,16 @@ public class Ruler implements Thing, Storage {
     @Override
     public String translation() {
         return "Линейка";
+    }
+
+    @Override
+    public boolean opened() {
+        return true;
+    }
+
+    @Override
+    public void openClose() throws CannotBeChangedException {
+        throw new CannotBeChangedException(translation() + " нельзя " + (opened() ? "закрыть" : "открыть") + " для обмена");
     }
 
     @Override

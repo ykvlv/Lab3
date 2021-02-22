@@ -1,6 +1,6 @@
-package Humans;
+package humans;
 
-import Things.Thing;
+import interfaces.Thing;
 
 public class Znaika extends Human {
 

@@ -1,7 +1,8 @@
-package Humans;
+package humans;
 
-import Storages.Storage;
-import Things.Thing;
+import exceptions.*;
+import interfaces.Storage;
+import interfaces.Thing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,16 +36,26 @@ public abstract class Human implements Storage {
     }
 
     @Override
+    public boolean opened() {
+        return true;
+    }
+
+    @Override
+    public void openClose() throws CannotBeChangedException {
+        throw new CannotBeChangedException(translation() + " нельзя " + (opened() ? "закрыть" : "открыть") + " для обмена");
+    }
+
+    @Override
     public boolean have(Thing thing) {
         return things.contains(thing);
     }
+
     public void changeHope(int hope) {
-        if (this.hope + hope >= 0 && this.hope + hope <= 10) {
+        int min = 0, max = 10;
+        if (this.hope + hope < min && this.hope + hope > max) {
+            throw new OutOfIntervalException("Выход за пределы [" + min + ", " + max + "]");
+        } else {
             this.hope += hope;
-        } else if (hope < 0) {
-            this.hope = 0;
-        } else if (hope > 0) {
-            this.hope = 10;
         }
     }
 
@@ -58,5 +69,17 @@ public abstract class Human implements Storage {
 
     public void say(String str) {
         System.out.printf("%s говорит: %s%n", translation(), str);
+    }
+
+    public class Characteristics {
+        public int iq = 100;
+
+        public Characteristics(int iq) {
+            this.iq = iq;
+        }
+
+        public Characteristics() {
+
+        }
     }
 }

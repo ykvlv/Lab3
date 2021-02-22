@@ -1,6 +1,7 @@
-package Storages;
+package storages;
 
-import Things.Thing;
+import interfaces.Storage;
+import interfaces.Thing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,8 +9,10 @@ import java.util.Objects;
 
 public class Cupboard implements Storage {
     private final ArrayList<Thing> things = new ArrayList<>();
+    private boolean open = true;
 
-    public Cupboard(Thing... things) {
+    public Cupboard(boolean open, Thing... things) {
+        this.open = open;
         this.things.addAll(Arrays.asList(things));
     }
 
@@ -17,6 +20,16 @@ public class Cupboard implements Storage {
     @Override
     public String translation() {
         return "Шкаф";
+    }
+
+    @Override
+    public boolean opened() {
+        return open;
+    }
+
+    @Override
+    public void openClose() {
+        open = !open;
     }
 
     @Override
