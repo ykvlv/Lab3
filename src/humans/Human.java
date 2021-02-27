@@ -1,23 +1,46 @@
 package humans;
 
 import exceptions.*;
-import interfaces.Storage;
-import interfaces.Thing;
+import interfaces.IStorage;
+import interfaces.IThing;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Random;
 
-public abstract class Human implements Storage {
-    private int hope = 5;
-    private final ArrayList<Thing> things = new ArrayList<>();
+public abstract class Human implements IStorage {
+    private final Characteristics ch = new Characteristics();
+    private int hope;
+    private final ArrayList<IThing> things = new ArrayList<>();
 
     public Human(int hope) {
-        this.hope = hope;
+        if (hope >= ch.minHope && hope <= ch.maxHope) {
+            this.hope = hope;
+        } else {
+            throw new InvalidParameterException("Надежда должна быть в промежутке [" + ch.minHope + ", " + ch.maxHope + "]");
+        }
     }
 
-    public Human(int hope, Thing... things) {
-        this.hope = hope;
-        this.things.addAll(Arrays.asList(things));
+    public Human(int hope, IThing... things) {
+        if (hope >= ch.minHope && hope <= ch.maxHope) {
+            this.hope = hope;
+        } else {
+            throw new InvalidParameterException("Надежда должна быть в промежутке [" + ch.minHope + ", " + ch.maxHope + "]");
+        }
+        if (things == null) {
+            throw new InvalidParameterException("Налл в качестве элемента");
+        }
+        for (IThing thing : things) {
+            if (thing == null) {
+                throw new InvalidParameterException("Налл в качестве элемента");
+            } else {
+                this.things.add(thing);
+            }
+        }
+    }
+
+    @Override
+    public ArrayList<IThing> thingList() {
+        return things;
     }
 
     @Override
@@ -26,12 +49,12 @@ public abstract class Human implements Storage {
     }
 
     @Override
-    public void give(Thing thing) {
+    public void give(IThing thing) {
         things.remove(thing);
     }
 
     @Override
-    public void take(Thing thing) {
+    public void take(IThing thing) {
         things.add(thing);
     }
 
@@ -46,15 +69,22 @@ public abstract class Human implements Storage {
     }
 
     @Override
-    public boolean have(Thing thing) {
+    public boolean have(IThing thing) {
         return things.contains(thing);
     }
 
+    @Override
+    public IThing giveRandom() {
+        return things.remove(new Random().nextInt(things.size()));
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return things.isEmpty();
+    }
+
     public void changeHope(int hope) {
-        int min = 0, max = 10;
-        if (this.hope + hope < min && this.hope + hope > max) {
-            throw new OutOfIntervalException("Выход за пределы [" + min + ", " + max + "]");
-        } else {
+        if (this.hope + hope >= ch.minHope && this.hope + hope <= ch.maxHope) {
             this.hope += hope;
         }
     }
@@ -71,15 +101,11 @@ public abstract class Human implements Storage {
         System.out.printf("%s говорит: %s%n", translation(), str);
     }
 
-    public class Characteristics {
+    public static class Characteristics {
         public int iq = 100;
+        public int maxHope = 20;
+        public int minHope = 0;
 
-        public Characteristics(int iq) {
-            this.iq = iq;
-        }
-
-        public Characteristics() {
-
-        }
+        public Characteristics() {}
     }
 }

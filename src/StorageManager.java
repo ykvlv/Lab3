@@ -1,9 +1,10 @@
+import enums.MineralType;
+import enums.ThingType;
 import exceptions.CannotBeChangedException;
 import gravity.Gravity;
 import humans.Human;
-import interfaces.Storage;
-import interfaces.Thing;
-import things.*;
+import interfaces.IStorage;
+import interfaces.IThing;
 
 public class StorageManager {
     private final Gravity subscriber;
@@ -12,11 +13,13 @@ public class StorageManager {
         this.subscriber = gravity;
     }
 
-    public void give(Human sender, Thing thing, Storage receiver) {
+    public void give(Human sender, IThing thing, IStorage receiver) {
         if (!sender.have(thing)) {
-            System.out.printf("У %s нету %s в инвентаре%n", sender.translation(), thing.translation());
+            System.out.printf("У %s нету %s%n", sender.translation(), thing.translation());
         } else if (!receiver.opened()) {
             System.out.printf("Доступ к %s ограничен%n", receiver.translation());
+        } else if (!sender.opened()) {
+            System.out.printf("Доступ к %s ограничен%n", sender.translation());
         } else {
             sender.give(thing);
             receiver.take(thing);
@@ -25,18 +28,37 @@ public class StorageManager {
         }
     }
 
-    public void take(Human receiver, Thing thing, Storage sender) {
-        if (sender.have(thing) && receiver.opened()) {
+    public void take(Human receiver, IThing thing, IStorage sender) {
+        if (!sender.have(thing)) {
+            System.out.printf("У %s нету %s%n", sender.translation(), thing.translation());
+        } else if (!receiver.opened()) {
+            System.out.printf("Доступ к %s ограничен%n", receiver.translation());
+        } else if (!sender.opened()) {
+            System.out.printf("Доступ к %s ограничен%n", sender.translation());
+        } else {
             sender.give(thing);
             receiver.take(thing);
             System.out.printf("%s достал %s из %s%n", receiver.translation(), thing.translation(), sender.translation());
             updateSubscriber(thing);
-        } else {
-            System.out.printf("У %s нету %s или доступ %s ограничен%n", sender.translation(), thing.translation(), receiver.translation());
         }
     }
 
-    public void open(Human human, Storage storage) {
+    public void takeSomething(Human receiver, IStorage sender) {
+        if (sender.isEmpty()) {
+            System.out.printf("%s пуст%n", sender.translation());
+        } else if (!receiver.opened()) {
+            System.out.printf("Доступ к %s ограничен%n", receiver.translation());
+        } else if (!sender.opened()) {
+            System.out.printf("Доступ к %s ограничен%n", sender.translation());
+        } else {
+            IThing thing = sender.giveRandom();
+            receiver.take(thing);
+            System.out.printf("%s достал %s из %s%n", receiver.translation(), thing.translation(), sender.translation());
+            updateSubscriber(thing);
+        }
+    }
+
+    public void open(Human human, IStorage storage) {
         try {
             storage.openClose();
             if (storage.opened()) {
@@ -49,8 +71,8 @@ public class StorageManager {
         }
     }
 
-    private void updateSubscriber(Thing thing) {
-        if (thing == Mineral.MOONROCK || thing == Mineral.MAGNETICIRONORE) {
+    private void updateSubscriber(IThing thing) {
+        if (thing.type() == ThingType.MINERAL) {
             subscriber.checkGravity();
         }
     }

@@ -1,59 +1,88 @@
 package gravity;
 
+import enums.MineralType;
+import enums.ThingType;
+import exceptions.InvalidParameterException;
 import humans.Human;
-import interfaces.Storage;
-import things.*;
+import interfaces.IStorage;
+import interfaces.IThing;
+import things.Mineral;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Gravity {
-    private final ArrayList<Storage> storages = new ArrayList<>();
+    private final ArrayList<IStorage> storages = new ArrayList<>();
     private boolean gravity;
     private final ArrayList<Human> humans = new ArrayList<>();
 
-    public Gravity(boolean gravity, Human[] humans, Storage[] storages) {
+    public Gravity(boolean gravity, Human[] humans, IStorage[] storages) {
+        if (humans == null || storages == null) {
+            throw new InvalidParameterException("Налл в качестве элемента");
+        } else {
+            for (Human human: humans) {
+                if (human == null) {
+                    throw new InvalidParameterException("Налл в качестве элемента");
+                }
+            }
+            for (IStorage storage: storages) {
+                if (storage == null) {
+                    throw new InvalidParameterException("Налл в качестве элемента");
+                }
+            }
+        }
         this.gravity = gravity;
         this.storages.addAll(Arrays.asList(storages));
         this.humans.addAll(Arrays.asList(humans));
     }
 
-    private void humansCanFly(boolean bool) {
+    private void changeGravityForHumans(boolean gravity) {
 
-        class HumanStr {
+        class HumansToStr {
             private final ArrayList<String> string;
 
-            public HumanStr() {
+            public HumansToStr() {
                 this.string = new ArrayList<>();
                 humans.forEach((Human h) -> string.add(h.translation()));
             }
 
         }
 
-        HumanStr humans =new HumanStr();
-        System.out.print(String.join(", ", humans.string));
-        System.out.println(bool ? " FLEW UP" : " FELL DOWN");
+        System.out.print(String.join(", ", new HumansToStr().string));
+        System.out.println(gravity ? " FLEW UP" : " FELL DOWN");
     }
 
     public void checkGravity() {
-        for (Storage storage : storages) {
-            if (storage.have(Mineral.MOONROCK) && storage.have(Mineral.MAGNETICIRONORE)) {
+        for (IStorage storage : storages) {
+            boolean moonrock = false, magnet = false;
+            for (IThing thing : storage.thingList()) {
+                if (thing != null && thing.type() == ThingType.MINERAL) {
+                    MineralType type = ((Mineral) thing).mineralType();
+                    if (type == MineralType.MOONROCK) {
+                        moonrock = true;
+                    } else if (type == MineralType.MAGNETICIRONORE) {
+                        magnet = true;
+                    }
+                }
+            }
+            if (moonrock && magnet) {
                 if (gravity) {
                     System.out.println("Внимание: На дворе невесомость");
-                    humansCanFly(true);
+                    changeGravityForHumans(true);
                 }
                 gravity = false;
                 break;
-            } else if (storage.have(Mineral.MOONROCK) || storage.have(Mineral.MAGNETICIRONORE)) {
-                if (!gravity) {
-                    System.out.println("Внимание: Действует сила тяжести");
-                    humansCanFly(false);
-                }
+            } else if ((moonrock || magnet) && !gravity) {
+                System.out.println("Внимание: Действует сила тяжести");
+                changeGravityForHumans(false);
                 gravity = true;
-                break;
             }
         }
+    }
+
+    public boolean getGravity() {
+        return gravity;
     }
 
     @Override

@@ -1,18 +1,12 @@
 package storages;
 
-import interfaces.Storage;
-import interfaces.Thing;
+import interfaces.IThing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
-public class Drawer implements Storage {
-    private boolean open = true;
-    private final ArrayList<Thing> things = new ArrayList<>();
-
-    public Drawer(Thing... things) {
-        this.things.addAll(Arrays.asList(things));
+public class Drawer extends Storage {
+    public Drawer(IThing... things) {
+        super(things);
     }
 
     @Override
@@ -21,47 +15,22 @@ public class Drawer implements Storage {
     }
 
     @Override
-    public boolean opened() {
-        return open;
-    }
-
-    @Override
-    public void openClose() {
-        open = !open;
-    }
-
-    @Override
-    public void give(Thing thing) {
-        things.remove(thing);
-    }
-
-    @Override
-    public void take(Thing thing) {
-        things.add(thing);
-    }
-
-    @Override
-    public boolean have(Thing thing) {
-        return things.contains(thing);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Drawer drawer = (Drawer) o;
-        return Objects.equals(things, drawer.things);
+        return Objects.equals(this.thingList(), drawer.thingList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(things);
+        return Objects.hash(this.thingList());
     }
 
     @Override
     public String toString() {
         return "Drawer{" +
-                "things=" + things +
+                "things=" + this.thingList() +
                 '}';
     }
 }

@@ -1,60 +1,44 @@
+import enums.MineralType;
 import gravity.Gravity;
 import humans.*;
-import interfaces.Storage;
-import interfaces.Thing;
+import interfaces.IStorage;
+import interfaces.IThing;
 import storages.*;
-import things.*;
+import things.Mineral;
 import thingsAndStorages.*;
 
 public class Main {
     public static void main(String[] args) {
-        Human znaika = new Znaika(10, Mineral.MOONROCK);
-        Human neznaika = new Neznaika(7, new Mineral.ArrayOfMinerals(3) {
-            public Thing[] getElements() {
-                return new Thing[]{this.elements[1]};
-            }
-        });
-        Human.Characteristics chNeznaika = neznaika.new Characteristics(14);
-        Human.Characteristics chZnaika = znaika.new Characteristics(150);
-        Storage bottomCupboard = new Cupboard(false, Mineral.ROCKCRYSTAL, Mineral.FELDSPAR, Mineral.MICA, Mineral.IRONSTONE, Mineral.COPPERPYRITE, Mineral.SULFUR, Mineral.PYRITE, Mineral.CHALCOPYRITE, Mineral.ZINKBLENDE, Mineral.GALENA, Mineral.MAGNETICIRONORE);
-        Storage topCupboard = new Cupboard(true, Mineral.DIAMOND, Mineral.APATITE, Mineral.HALITE);
+        IThing moonRock = new Mineral(MineralType.MOONROCK);
+        IThing magneticIronOre = new Mineral(MineralType.MAGNETICIRONORE);
+        Human znaika = new Znaika(20, moonRock);
+        Human neznaika = new Neznaika(7);
+        IStorage bottomCupboard = new Cupboard(true, new Mineral(MineralType.ROCKCRYSTAL), new Mineral(MineralType.FELDSPAR), new Mineral(MineralType.MICA), new Mineral(MineralType.IRONSTONE), new Mineral(MineralType.COPPERPYRITE), new Mineral(MineralType.SULFUR), new Mineral(MineralType.PYRITE), new Mineral(MineralType.CHALCOPYRITE), new Mineral(MineralType.ZINKBLENDE), new Mineral(MineralType.GALENA), magneticIronOre);
+        IStorage topCupboard = new Cupboard(true, new Mineral(MineralType.DIAMOND), new Mineral(MineralType.APATITE), new Mineral(MineralType.HALITE));
         Ruler ruler = new Ruler();
-        Storage drawer = new Drawer(ruler);
-        Gravity znaikaRoomGravity = new Gravity(true, new Human[]{znaika, neznaika}, new Storage[]{bottomCupboard, topCupboard, ruler, drawer});
+        IStorage drawer = new Drawer(ruler);
+        Gravity znaikaRoomGravity = new Gravity(true, new Human[]{znaika, neznaika}, new IStorage[]{bottomCupboard, topCupboard, ruler, drawer});
         StorageManager s = new StorageManager(znaikaRoomGravity);
 
-
-
         znaika.say("Надо доставать из шкафчика все хранящиеся минералы. Как только будет удалено существо, с которым взаимодействует лунит, невесомость исчезнет, и мы узнаем, что это за вещество");
-        s.give(znaika, Mineral.MOONROCK, bottomCupboard);
-        s.open(znaika, bottomCupboard);
-        s.give(znaika, Mineral.MOONROCK, bottomCupboard);
-        s.take(znaika, Mineral.ROCKCRYSTAL, bottomCupboard);
-        s.take(znaika, Mineral.FELDSPAR, bottomCupboard);
-        s.take(znaika, Mineral.MICA, bottomCupboard);
-        s.take(znaika, Mineral.IRONSTONE, bottomCupboard);
-        s.take(znaika, Mineral.COPPERPYRITE, bottomCupboard);
-        s.take(znaika, Mineral.SULFUR, bottomCupboard);
-        s.take(znaika, Mineral.PYRITE, bottomCupboard);
-        s.take(znaika, Mineral.CHALCOPYRITE, bottomCupboard);
-        znaika.changeHope(-2);
-        s.take(znaika, Mineral.ZINKBLENDE, bottomCupboard);
-        s.take(znaika, Mineral.GALENA, bottomCupboard);
-        s.take(znaika, Mineral.DIAMOND, topCupboard);
-        s.take(znaika, Mineral.APATITE, topCupboard);
-        znaika.changeHope(-2);
-        s.take(znaika, Mineral.HALITE, topCupboard);
-        znaika.changeHope(-5);
-        znaika.printHope();
-        s.take(znaika, Mineral.MAGNETICIRONORE, bottomCupboard);
-        znaika.changeHope(7);
-
+        s.give(znaika, moonRock, bottomCupboard);
+        while ((!bottomCupboard.isEmpty() || !topCupboard.isEmpty())) {
+            if (!topCupboard.isEmpty()) {
+                s.takeSomething(znaika, topCupboard);
+            } else if (!bottomCupboard.isEmpty()) {
+                s.takeSomething(znaika, bottomCupboard);
+            }
+            if (znaikaRoomGravity.getGravity()) {
+                System.out.println("Ах вот кто ты!");
+                break;
+            } else {
+                znaika.changeHope(-1);
+            }
+        }
         s.take(znaika, ruler, drawer);
-        s.give(znaika, Mineral.MAGNETICIRONORE, ruler);
-        s.take(znaika, Mineral.MOONROCK, bottomCupboard);
-        s.give(znaika, Mineral.MOONROCK, ruler);
-        s.take(znaika, Mineral.MOONROCK, ruler);
-        s.give(znaika, Mineral.MOONROCK, ruler);
+        s.give(znaika, magneticIronOre, ruler);
+        s.take(znaika, moonRock, bottomCupboard);
+        s.give(znaika, moonRock, ruler);
         znaika.say("Нормально так жмыхнуло.");
         neznaika.say("Еще бы");
     }

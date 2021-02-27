@@ -1,10 +1,10 @@
 package humans;
 
-import interfaces.Thing;
+import interfaces.IThing;
 
 public class Znaika extends Human {
 
-    public Znaika(int hope, Thing... things) {
+    public Znaika(int hope, IThing... things) {
         super(hope, things);
     }
 

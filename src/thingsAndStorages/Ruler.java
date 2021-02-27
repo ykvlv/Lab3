@@ -1,17 +1,17 @@
 package thingsAndStorages;
 
+import enums.ThingType;
 import exceptions.CannotBeChangedException;
-import interfaces.Storage;
-import interfaces.Thing;
+import interfaces.*;
 
-import java.util.Objects;
+import java.util.*;
 
-public class Ruler implements Thing, Storage {
-    private Thing left = null;
-    private Thing right = null;
+public class Ruler implements IThing, IStorage {
+    private IThing left = null;
+    private IThing right = null;
 
     @Override
-    public void give(Thing thing) {
+    public void give(IThing thing) {
         if (left == thing) {
             left = null;
         } else {
@@ -20,13 +20,33 @@ public class Ruler implements Thing, Storage {
     }
 
     @Override
-    public void take(Thing thing) {
+    public void take(IThing thing) {
         right = left;
         left = thing;
     }
 
     @Override
-    public boolean have(Thing thing) {
+    public IThing giveRandom() {
+        boolean b = new Random().nextBoolean();
+        IThing thing = b ? left : right;
+        if (b) {
+            left = null;
+        } else {
+            right = null;
+        }
+        return thing;
+    }
+
+    @Override
+    public ArrayList<IThing> thingList() {
+        ArrayList<IThing> a = new ArrayList<>();
+        a.add(left);
+        a.add(right);
+        return a;
+    }
+
+    @Override
+    public boolean have(IThing thing) {
         return left == thing || right == thing;
     }
 
@@ -36,6 +56,12 @@ public class Ruler implements Thing, Storage {
     }
 
     @Override
+    public ThingType type() {
+        return ThingType.EDUCATIONAL;
+    }
+
+
+    @Override
     public boolean opened() {
         return true;
     }
@@ -43,6 +69,11 @@ public class Ruler implements Thing, Storage {
     @Override
     public void openClose() throws CannotBeChangedException {
         throw new CannotBeChangedException(translation() + " нельзя " + (opened() ? "закрыть" : "открыть") + " для обмена");
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return left != null && right != null;
     }
 
     @Override
