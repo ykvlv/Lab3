@@ -1,3 +1,4 @@
+import actions.HumanTakesStones;
 import enums.MineralType;
 import gravity.Gravity;
 import humans.*;
@@ -22,19 +23,9 @@ public class Main {
 
         znaika.say("Надо доставать из шкафчика все хранящиеся минералы. Как только будет удалено существо, с которым взаимодействует лунит, невесомость исчезнет, и мы узнаем, что это за вещество");
         s.give(znaika, moonRock, bottomCupboard);
-        while ((!bottomCupboard.isEmpty() || !topCupboard.isEmpty())) {
-            if (!topCupboard.isEmpty()) {
-                s.takeSomething(znaika, topCupboard);
-            } else if (!bottomCupboard.isEmpty()) {
-                s.takeSomething(znaika, bottomCupboard);
-            }
-            if (znaikaRoomGravity.getGravity()) {
-                System.out.println("Ах вот кто ты!");
-                break;
-            } else {
-                znaika.changeHope(-1);
-            }
-        }
+        HumanTakesStones znaikaGetsStones = new HumanTakesStones(s, znaikaRoomGravity, znaika, topCupboard, bottomCupboard);
+        znaikaGetsStones.runAction();
+
         s.take(znaika, ruler, drawer);
         s.give(znaika, magneticIronOre, ruler);
         s.take(znaika, moonRock, bottomCupboard);

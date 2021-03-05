@@ -1,3 +1,5 @@
+package storages;
+
 import enums.MineralType;
 import enums.ThingType;
 import exceptions.CannotBeChangedException;
